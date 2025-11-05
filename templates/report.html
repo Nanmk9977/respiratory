@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LungCare AI - Diagnosis Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #000; }
+        h2 { text-align: center; }
+        .section { margin-top: 20px; }
+        img { display: block; margin: 10px auto; max-width: 70%; border-radius: 10px; }
+        .details { line-height: 1.8; font-size: 16px; }
+        .label { font-weight: bold; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<h2><b>LungCare AI - Diagnosis Report</b></h2>
+
+<div class="details">
+    <p><span class="label">Name:</span> {{ name }}</p>
+    <p><span class="label">Mobile:</span> {{ mobile }}</p>
+    <p><span class="label">Age:</span> {{ age }}</p>
+    <p><span class="label">Sex:</span> {{ sex }}</p>
+    <p><span class="label">Address:</span> {{ address }}</p>
+    <p><span class="label">Disease Detected:</span> {{ disease }}</p>
+    <p><span class="label">Vitals Status:</span> {{ vitals_status }}</p>
+</div>
+
+<div class="section">
+    <h3>Vitals Visualization</h3>
+    <img src="{{ url_for('static', filename='gradcam_output.png') }}" alt="GradCAM Result">
+</div>
+
+<div class="section">
+    <h3>Vitals Trend Over Time</h3>
+    <img src="{{ url_for('static', filename='vitals_trend.png') }}" alt="Vitals Trend Graph">
+</div>
+
+</body>
+</html>

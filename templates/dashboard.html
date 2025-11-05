@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Healthcare App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="h3 mb-4">Dashboard</h1>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Welcome Card -->
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-user fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="card-title">Welcome, {{ current_user.name }}!</h5>
+                        <p class="card-text mb-0">Age: {{ current_user.age }}</p>
+                        <p class="card-text">Blood Group: {{ current_user.blood_group }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Summary Cards -->
+    <div class="col-md-6 col-lg-2 mb-4">
+        <div class="card border-danger">
+            <div class="card-body text-center">
+                <i class="fas fa-heartbeat fa-2x text-danger mb-2"></i>
+                <h6>Heart Rate</h6>
+                <h4>
+                    {% if recent_params and recent_params[0].heart_rate %}
+                        {{ recent_params[0].heart_rate }}
+                    {% else %}
+                        --
+                    {% endif %}
+                </h4>
+                <small class="text-muted">BPM</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-2 mb-4">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-tint fa-2x text-warning mb-2"></i>
+                <h6>Blood Pressure</h6>
+                <h4>
+                    {% if recent_params and recent_params[0].systolic_bp %}
+                        {{ recent_params[0].systolic_bp }}/{{ recent_params[0].diastolic_bp }}
+                    {% else %}
+                        --/--
+                    {% endif %}
+                </h4>
+                <small class="text-muted">mmHg</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-2 mb-4">
+        <div class="card border-info">
+            <div class="card-body text-center">
+                <i class="fas fa-lungs fa-2x text-info mb-2"></i>
+                <h6>SpO2</h6>
+                <h4>
+                    {% if recent_params and recent_params[0].spo2 %}
+                        {{ recent_params[0].spo2 }}%
+                    {% else %}
+                        --%
+                    {% endif %}
+                </h4>
+                <small class="text-muted">Oxygen</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-2 mb-4">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <i class="fas fa-thermometer-half fa-2x text-success mb-2"></i>
+                <h6>Temperature</h6>
+                <h4>
+                    {% if recent_params and recent_params[0].temperature %}
+                        {{ recent_params[0].temperature }}°C
+                    {% else %}
+                        --°C
+                    {% endif %}
+                </h4>
+                <small class="text-muted">Celsius</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Health Parameters -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Health Parameters</h5>
+                <a href="{{ url_for('health_parameters') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_params %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Heart Rate</th>
+                                <th>BP</th>
+                                <th>SpO2</th>
+                                <th>Temp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for param in recent_params %}
+                            <tr>
+                                <td>{{ param.recorded_at.strftime('%m/%d %H:%M') }}</td>
+                                <td>{{ param.heart_rate or '--' }}</td>
+                                <td>
+                                    {% if param.systolic_bp and param.diastolic_bp %}
+                                        {{ param.systolic_bp }}/{{ param.diastolic_bp }}
+                                    {% else %}
+                                        --/--
+                                    {% endif %}
+                                </td>
+                                <td>{{ param.spo2 or '--' }}%</td>
+                                <td>{{ param.temperature or '--' }}°C</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No health parameters recorded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Reports -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Medical Reports</h5>
+                <a href="{{ url_for('results') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_reports %}
+                <div class="list-group list-group-flush">
+                    {% for report in recent_reports %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ report.title }}</h6>
+                            <small class="text-muted">{{ report.uploaded_at.strftime('%m/%d/%Y') }}</small>
+                        </div>
+                        <p class="mb-1 text-muted">{{ report.description[:100] }}{% if report.description|length > 100 %}...{% endif %}</p>
+                        <small class="text-{{ 'success' if report.status == 'completed' else 'warning' if report.status == 'reviewed' else 'secondary' }}">
+                            Status: <a href="/report" target="__blank">View Reports</a> 
+                        </small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No medical reports uploaded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Trends Chart -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Health Trends</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="healthChart" width="400" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/health-data')
+        .then(response => response.json())
+        .then(data => {
+            if (data.dates.length > 0) {
+                const ctx = document.getElementById('healthChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [
+                            {
+                                label: 'Heart Rate (BPM)',
+                                data: data.heart_rates,
+                                borderColor: 'rgb(255, 99, 132)',
+                                tension: 0.1,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Systolic BP',
+                                data: data.systolic_bp,
+                                borderColor: 'rgb(255, 205, 86)',
+                                tension: 0.1,
+                                yAxisID: 'y1'
+                            },
+                            {
+                                label: 'SpO2 (%)',
+                                data: data.spo2,
+                                borderColor: 'rgb(54, 162, 235)',
+                                tension: 0.1,
+                                yAxisID: 'y'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            },
+                        }
+                    }
+                });
+            }
+        });
+});
+</script>
+{% endblock %}

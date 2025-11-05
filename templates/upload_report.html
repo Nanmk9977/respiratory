@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Report - Healthcare App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-file-medical me-2"></i>Upload Medical Report
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    
+                    <div class="mb-4">
+                        <label for="report_file" class="form-label">Upload  File</label>
+                        <input type="file" class="form-control" id="report_file" name="report_file" 
+                               accept=".jpg,.jpeg,.png," required>
+                        <div class="form-text">
+                            Supported formats: JPG, PNG (Max 16MB)
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Upload Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Upload Guidelines</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Ensure the document is clear and readable</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Include all relevant pages for multi-page reports</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Make sure personal information is visible</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Upload recent reports for accurate analysis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
