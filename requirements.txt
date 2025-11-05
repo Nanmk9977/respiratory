@@ -18,7 +18,7 @@ setuptools
 wheel
 
 # Machine Learning / Deep Learning
-tensorflow==2.15.0
+tensorflow-cpu==2.15.0
 torch==2.2.2
 torchvision==0.17.2
 
@@ -27,4 +27,5 @@ SQLAlchemy==2.0.29
 
 # Optional for pickle (already in stdlib but some servers require)
 cloudpickle==3.0.0
+
 
