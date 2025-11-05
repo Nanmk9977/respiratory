@@ -1,3 +1,4 @@
+# Flask
 Flask==3.0.3
 Flask-Login==0.6.3
 Werkzeug==3.0.2
@@ -8,24 +9,22 @@ requests==2.31.0
 python-dotenv==1.0.1
 MarkupSafe==2.1.5
 
-# Image and array processing
-Pillow>=10.0.0
-opencv-python==4.9.0.80
-scikit-image==0.22.0
-matplotlib==3.8.4
-numpy==1.26.4
-setuptools
-wheel
-
 # Machine Learning / Deep Learning
 tensorflow-cpu==2.15.0
 torch==2.2.2
 torchvision==0.17.2
 
+# Image Processing
+Pillow==10.3.0
+opencv-python==4.9.0.80
+scikit-image==0.22.0
+matplotlib==3.8.4
+numpy==1.26.4
+
 # Database
 SQLAlchemy==2.0.29
 
-# Optional for pickle (already in stdlib but some servers require)
+# Utilities
 cloudpickle==3.0.0
-
-
+setuptools
+wheel
