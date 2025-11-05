@@ -27,6 +27,9 @@ import requests
 from datetime import datetime, timezone, timedelta
 import sqlite3
 
+app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
+
 def get_age_by_email(email):
     # Connect to the healthcare database
     conn = sqlite3.connect("instance/healthcare.db")
@@ -553,3 +556,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
+
